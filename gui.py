@@ -304,10 +304,10 @@ class MainApp:
     def clear_log(self):
         self.add_text_widget(self.txt_log, "1.0", "")
 
-def bfs_solver(filename):
+def bfs_solver_sample(filename):
     return "uddurlrl", "Log BFS\nJust testing..."
 
-def aStar_solver(filename):
+def aStar_solver_sample(filename):
     return "rrurru", "Log AStar\nSolution only contains u, d, r and l letter (not capital).\n"
 
 if __name__ == "__main__":
@@ -315,6 +315,6 @@ if __name__ == "__main__":
     window.title("Sokoban Solver")
     # Map area size
     window.columnconfigure(1, minsize=550)
-    app = MainApp(window, bfs_solver, aStar_solver)
+    app = MainApp(window, bfs_solver_sample, aStar_solver_sample)
     window.resizable(False, False)
     window.mainloop()
