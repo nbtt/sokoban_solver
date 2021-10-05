@@ -221,7 +221,7 @@ class MainApp:
         self.solve_map(self.solver_aStar)
 
     def solve_map(self, solver_func):
-        if not self.map_idx:
+        if self.map_idx is None:
             return
         self.pause_funcs()
         solution, log = solver_func(os.path.join("map", self.map_name + ".txt"))
