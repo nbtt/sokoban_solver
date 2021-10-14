@@ -103,6 +103,7 @@ class Sokoban:
                     child = deepcopy(currNode)
                     child.move(m)
                     if child not in exploredQueue:
-                        if child.is_win():
-                            return child
+                        if not child.boxes.issubset(currNode.boxes):
+                            if child.is_win():
+                                return child
                         heuQueue.put(child)

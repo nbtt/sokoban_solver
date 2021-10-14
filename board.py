@@ -1,6 +1,6 @@
 from spot import Spot
 from direction import Direction
-
+from queue import Queue
 L = Direction(Spot(-1, 0), 'l')
 R = Direction(Spot(1, 0), 'r')
 U = Direction(Spot(0, -1), 'u')
@@ -35,8 +35,17 @@ class Board:
     def getHeuristic(self):
         box = list(self.boxes)
         goal = list(self.goals)
-        if (self.heuristic == 0):
-            self.heuristic = self.cost + abs(sum(box[i].x + box[i].y - goal[i].x - goal[i].y for i in range(len(box))))
+        numBox = len(box)
+        sumG = 0
+        for i in range(numBox):
+            min = abs((box[i].x-goal[0].x)) + abs((box[i].y-goal[0].y))
+            for j in range(1,numBox):
+                temp = abs((box[i].x-goal[j].x)) + abs((box[i].y-goal[j].y))
+                if (temp < min):
+                    min = temp
+            sumG += min
+        sumP = sum(abs(box[i].x-self.player.x) + abs(box[i].y-self.player.y) for i in range(numBox))
+        self.heuristic = sumG + sumP + numBox - len(self.boxes & self.goals)
         return self.heuristic
 
     def __hash__(self):

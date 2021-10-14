@@ -9,7 +9,7 @@ def bfs_solver(filename):
     state_board = sok.new_board(filename)
     board = sok.search(state_board)
     end = time()
-    return str(board.getDirections()), "Time: " + str(end - start)
+    return str(board.getDirections()), "Time: " + str(end - start) + "\nLength: " + str(len(str(board.getDirections())))
 
 def aStar_solver(filename):
     start = time()
@@ -17,7 +17,7 @@ def aStar_solver(filename):
     state_board = sok.new_board(filename)
     board = sok.aStar_search(state_board)
     end = time()
-    return str(board.getDirections()), "Time: " + str(end - start)
+    return str(board.getDirections()), "Time: " + str(end - start) + "\nLength: " + str(len(str(board.getDirections())))
 
 if __name__ == "__main__":
     window = tk.Tk()
