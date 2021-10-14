@@ -8,8 +8,8 @@ import os
 from datetime import datetime
 
 class MainApp:
-    # @param (method) bfs_solver : (file_name : string) -> (solution : string, log : string)
-    # @param (method) aStar_solver : (file_name : string) -> (solution : string, log : string)
+    # @param (method) bfs_solver : (file_name : string, max_time : int) -> (solution : string, log : string)
+    # @param (method) aStar_solver : (file_name : string, max_time : int) -> (solution : string, log : string)
     def __init__(self, master : tk.Tk, bfs_solver, aStar_solver):
         self.master = master
         self.solver_bfs = bfs_solver
@@ -240,7 +240,7 @@ class MainApp:
             return
         self.btn_show.configure(state=DISABLED) # Disable show button when playing
         self.disable_solving() # Disable solving function
-        solution, log = solver_func(os.path.join("map", self.map_name + ".txt"))
+        solution, log = solver_func(os.path.join("map", self.map_name + ".txt"), self.max_time_var.get())
         # Change text in txt_solution
         self.txt_solution.tag_remove("current_move", "1.0", tk.END) # Remove tag
         self.add_text_widget(self.txt_solution, "1.0", solution)
@@ -249,9 +249,15 @@ class MainApp:
         self.add_text_widget(self.txt_log, tk.END, "Solve " + self.map_name + " using " + 
             ("BFS\n\n" if solver_func == self.solver_bfs else "A*\n\n"), rewrite_or_change=False)
         self.add_text_widget(self.txt_log, tk.END, log, rewrite_or_change=False)
+        if solution == "Not Found":
+            self.add_text_widget(self.txt_log, tk.END, "\nTimeout (Exceed " + str(self.max_time_var.get()) + " seconds)",
+                rewrite_or_change=False)
         self.add_text_widget(self.txt_log, tk.END, "\n==========\n\n", rewrite_or_change=False)
 
-        self.move(list(solution), 0)
+        if solution == "Not Found":
+            self.btn_show.configure(state=NORMAL)
+        else:
+            self.move(list(solution), 0)
 
     def move(self, moves, current_idx):
         if current_idx >= len(moves):
