@@ -24,6 +24,7 @@ class Board:
         self.player = None
         self.cost = 1  # used for UCS and heuristic searches
         self.heuristic = 0
+        self.index = 0
 
     def __eq__(self, other):
         ''' checking for 'equality' of box positions and player positions '''
@@ -90,6 +91,9 @@ class Board:
                     moves.append(d)
         return moves
 
+    def notfound(self):
+        self.index = 1
+
     def move(self, direction):
         ''' moves player and box '''
         p = self.player + direction.sp
@@ -109,6 +113,8 @@ class Board:
 
     def getDirections(self):
         ''' Outputs the list of directions taken for the solution '''
+        if self.index != 0:
+            return 'Not Found'
         chars = ''
         for d in self.dir_list:
             chars += d.char

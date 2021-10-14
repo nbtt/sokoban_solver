@@ -4,20 +4,36 @@ from gui import MainApp
 import tkinter as tk
 
 def bfs_solver(filename):
-    start = time()
     sok = Sokoban()
     state_board = sok.new_board(filename)
+<<<<<<< HEAD
     board = sok.search(state_board)
     end = time()
     return str(board.getDirections()), "Time: " + str(end - start) + "\nLength: " + str(len(str(board.getDirections())))
+=======
+    board = sok.BFS_search(state_board, 10)
+    return str(board.getDirections()), "Time: " + str(sok.timerun) + " seconds" \
+        + "\nSolution Length: " + str(len(str(board.getDirections()))) \
+        + "\nGenerated States: " + str(sok.numNodeNewState()) \
+        + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
+        + "\nSolution: " + str(board.getDirections())
+>>>>>>> 07a32ee2519cbfb8156b68a380f054fbaee68904
 
 def aStar_solver(filename):
-    start = time()
     sok = Sokoban()
     state_board = sok.new_board(filename)
+<<<<<<< HEAD
     board = sok.aStar_search(state_board)
     end = time()
     return str(board.getDirections()), "Time: " + str(end - start) + "\nLength: " + str(len(str(board.getDirections())))
+=======
+    board = sok.aStar_search(state_board, 10)
+    return str(board.getDirections()), "Time: " + str(sok.timerun) + " seconds" \
+        + "\nSolution Length: " + str(len(str(board.getDirections()))) \
+        + "\nGenerated States: " + str(sok.numNodeNewState()) \
+        + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
+        + "\nSolution: " + str(board.getDirections())
+>>>>>>> 07a32ee2519cbfb8156b68a380f054fbaee68904
 
 if __name__ == "__main__":
     window = tk.Tk()

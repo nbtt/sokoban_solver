@@ -2,13 +2,14 @@ import tkinter as tk
 from tkinter.constants import DISABLED, HORIZONTAL, NORMAL, SUNKEN, VERTICAL
 from tkinter.font import Font
 import tkinter.ttk as ttk
+from typing_extensions import IntVar
 from PIL import Image, ImageTk
 import os
 from datetime import datetime
 
 class MainApp:
-    # @param (method) bfs_solver : (file_name : string) -> (solution : string, log : string)
-    # @param (method) aStar_solver : (file_name : string) -> (solution : string, log : string)
+    # @param (method) bfs_solver : (file_name : string, max_time : int) -> (solution : string, log : string)
+    # @param (method) aStar_solver : (file_name : string, max_time : int) -> (solution : string, log : string)
     def __init__(self, master : tk.Tk, bfs_solver, aStar_solver):
         self.master = master
         self.solver_bfs = bfs_solver
@@ -46,8 +47,8 @@ class MainApp:
 
         # Buttons
         self.btn_show = ttk.Button(master=self.frm_ctrl, text="Show")
-        self.btn_solve_BFS = ttk.Button(master=self.frm_ctrl, text="Solve BFS")
-        self.btn_solve_AStar = ttk.Button(master=self.frm_ctrl, text="Solve A*")
+        self.btn_solve_BFS = ttk.Button(master=self.frm_ctrl, text="Solve BFS", state=DISABLED)
+        self.btn_solve_AStar = ttk.Button(master=self.frm_ctrl, text="Solve A*", state=DISABLED)
         
         self.btn_show.pack()
         self.btn_solve_BFS.pack()
@@ -57,7 +58,7 @@ class MainApp:
         self.lbl_2 = ttk.Label(master=self.frm_ctrl, text="Solution:")
         self.lbl_2.pack()
         self.frm_txt_solution = ttk.Frame(master=self.frm_ctrl)
-        self.txt_solution = tk.Text(master=self.frm_txt_solution, width=16, height=12, state=DISABLED)
+        self.txt_solution = tk.Text(master=self.frm_txt_solution, width=16, height=10, state=DISABLED)
         self.scrbar_txt_solution = ttk.Scrollbar(master=self.frm_txt_solution, orient=VERTICAL, command=self.txt_solution.yview)
         self.txt_solution.configure(yscrollcommand=self.scrbar_txt_solution.set)
         self.frm_txt_solution.pack()
@@ -78,6 +79,19 @@ class MainApp:
         self.scl_delay = ttk.Scale(master=self.frm_ctrl, from_=100, to=3000, orient="horizontal", value=self.delay_time_var.get(), 
             command=lambda x: self.delay_time_var.set(int(float(x))))
         self.scl_delay.pack(fill=tk.X)
+
+        # Maximum time
+        self.frm_max_time = ttk.Frame(master=self.frm_ctrl)
+        self.frm_max_time.pack()
+        self.lbl_6 = ttk.Label(master=self.frm_max_time, text="Max time: ")
+        self.lbl_6.pack(side=tk.LEFT)
+        self.max_time_var = tk.IntVar(value=30)
+        vcmd = (self.master.register(self.on_validate_max_time), "%P")
+        self.spinbx_max_time = ttk.Spinbox(master=self.frm_max_time, from_=1, to=1800, textvariable=self.max_time_var, 
+            width=5, validate="key", validatecommand=vcmd)
+        self.spinbx_max_time.pack(side=tk.LEFT)
+        self.lbl_7 = ttk.Label(master=self.frm_max_time, text=" secs")
+        self.lbl_7.pack(side=tk.LEFT)
 
         ## Map area variable
         self.map_content = None # Map's file content
@@ -126,15 +140,13 @@ class MainApp:
         self.btn_save_log.configure(command=self.save_log)
         self.btn_clr_log.configure(command=self.clear_log)
 
-    # This function is used for disable some function of app when the game is playing
-    def pause_funcs(self):
-        self.btn_show.configure(state=DISABLED)
+    # This function is used for disable solving function of app after a solution is made
+    def disable_solving(self):
         self.btn_solve_BFS.configure(state=DISABLED)
         self.btn_solve_AStar.configure(state=DISABLED)
 
     # Opposite function of pause_funcs()
-    def continue_funcs(self):
-        self.btn_show.configure(state=NORMAL)
+    def enable_solving(self):
         self.btn_solve_BFS.configure(state=NORMAL)
         self.btn_solve_AStar.configure(state=NORMAL)
 
@@ -143,6 +155,9 @@ class MainApp:
         if len(self.map_idx) == 0: # not chosen yet
             self.map_idx = None
             return
+
+        self.enable_solving() # Enable solving function
+
         self.add_text_widget(self.txt_solution, "1.0", "") # Clear text in txt_solution
         self.map_idx = self.map_idx[0]
         
@@ -223,8 +238,9 @@ class MainApp:
     def solve_map(self, solver_func):
         if self.map_idx is None:
             return
-        self.pause_funcs()
-        solution, log = solver_func(os.path.join("map", self.map_name + ".txt"))
+        self.btn_show.configure(state=DISABLED) # Disable show button when playing
+        self.disable_solving() # Disable solving function
+        solution, log = solver_func(os.path.join("map", self.map_name + ".txt"), self.max_time_var.get())
         # Change text in txt_solution
         self.txt_solution.tag_remove("current_move", "1.0", tk.END) # Remove tag
         self.add_text_widget(self.txt_solution, "1.0", solution)
@@ -233,13 +249,19 @@ class MainApp:
         self.add_text_widget(self.txt_log, tk.END, "Solve " + self.map_name + " using " + 
             ("BFS\n\n" if solver_func == self.solver_bfs else "A*\n\n"), rewrite_or_change=False)
         self.add_text_widget(self.txt_log, tk.END, log, rewrite_or_change=False)
+        if solution == "Not Found":
+            self.add_text_widget(self.txt_log, tk.END, "\nTimeout (Exceed " + str(self.max_time_var.get()) + " seconds)",
+                rewrite_or_change=False)
         self.add_text_widget(self.txt_log, tk.END, "\n==========\n\n", rewrite_or_change=False)
 
-        self.move(list(solution), 0)
+        if solution == "Not Found":
+            self.btn_show.configure(state=NORMAL)
+        else:
+            self.move(list(solution), 0)
 
     def move(self, moves, current_idx):
         if current_idx >= len(moves):
-            self.continue_funcs()
+            self.btn_show.configure(state=NORMAL)
             return
 
         # Remove previous tag
@@ -295,6 +317,9 @@ class MainApp:
         self.map_frame[self.player_pos[0]][self.player_pos[1]].delete("all")
         self.visualize_img(self.map_frame[new_pos_x][new_pos_y], self.img_player)
         self.player_pos = (new_pos_x, new_pos_y)
+
+    def on_validate_max_time(self, new_value):
+        return new_value.isdigit() and 1 <= int(new_value) <= 1800
 
     def save_log(self):
         f = open("Log_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + ".txt", "w")

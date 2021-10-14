@@ -18,6 +18,11 @@ class Sokoban:
     Sokoban game class
     '''
 
+    def __init__(self):
+        self.nodes_newstate = 0
+        self.explored = set()
+        self.timerun = 0.0
+
     def new_board(self, filename):
         ''' Creates new board from file '''
         e = []  # empty solution list
@@ -56,14 +61,27 @@ class Sokoban:
                 print ("No player on board")
                 return None
 
+    # Node NewState
+    def numNodeNewState(self):
+        return self.nodes_newstate
+    # Explored
+    def numNodeExplored(self):
+        return self.explored
     #BFS
-    def search(self, board):
+    def BFS_search(self, board, max_time):
+        start = time()
+        self.nodes_newstate = 0
+        #nodes_newstate = 0
         if board.is_win():
+            end = time()
+            self.timerun = end - start
             return board
         node = deepcopy(board) 
+        self.nodes_newstate += 1
         frontier = MyQueue()
         frontier.push(node)
-        explored = set() #nut kham pha
+        self.explored = set()
+        #explored = set() #nut kham pha
         keepLooking = True
         while keepLooking:
             if frontier.isEmpty():
@@ -73,22 +91,37 @@ class Sokoban:
                 currNode = frontier.pop()
                 moves = currNode.moves_available()
                 currNode.fboxes = frozenset(currNode.boxes)
-                explored.add(currNode)
+                self.explored.add(currNode)
                 for m in moves:
                     child = deepcopy(currNode)
+                    self.nodes_newstate += 1
                     child.move(m)
-                    if child not in explored:
+                    if child not in self.explored:
                         if child.is_win():
+                            end = time()
+                            self.timerun = end - start
                             return child
                         frontier.push(child)
+                        end = time()
+                        if end - start > max_time:
+                            child.notfound()
+                            self.timerun = end - start
+                            return child
     # A star Search
-    def aStar_search(self, board):
+    def aStar_search(self, board, max_time):
+        start = time()
+        self.nodes_newstate = 0
+        #nodes_newstate = 0
         if board.is_win():
+            end = time()
+            self.timerun = end - start
             return board
         initState = deepcopy(board) 
+        self.nodes_newstate += 1
         heuQueue = PriorityQueue()
         heuQueue.put(initState)
-        exploredQueue = set()
+        self.explored = set()
+        #explored = set()
         keepLooking = True 
         while keepLooking:
             if heuQueue.empty():
@@ -98,12 +131,26 @@ class Sokoban:
                 currNode = heuQueue.get()
                 moves = currNode.moves_available()
                 currNode.fboxes = frozenset(currNode.boxes)
-                exploredQueue.add(currNode)
+                self.explored.add(currNode)
                 for m in moves:
                     child = deepcopy(currNode)
+                    self.nodes_newstate += 1
                     child.move(m)
+<<<<<<< HEAD
                     if child not in exploredQueue:
                         if not child.boxes.issubset(currNode.boxes):
                             if child.is_win():
                                 return child
+=======
+                    if child not in self.explored:
+                        if child.is_win():
+                            end = time()
+                            self.timerun = end - start
+                            return child
+>>>>>>> 07a32ee2519cbfb8156b68a380f054fbaee68904
                         heuQueue.put(child)
+                        end = time()
+                        if end - start > max_time:
+                            child.notfound()
+                            self.timerun = end - start
+                            return child
