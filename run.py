@@ -9,7 +9,11 @@ def bfs_solver(filename):
     state_board = sok.new_board(filename)
     board = sok.BFS_search(state_board)
     end = time()
-    return str(board.getDirections()), "Time: " + str(end - start) + "\nLength: " + str(len(str(board.getDirections()))) + "\nGenerated States: " + str(sok.numNodeNewState()) + "\nTraversed States: " + str(len(sok.numNodeExplored()))
+    return str(board.getDirections()), "Time: " + str(end - start) + " seconds" \
+        + "\nLength: " + str(len(str(board.getDirections()))) \
+        + "\nGenerated States: " + str(sok.numNodeNewState()) \
+        + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
+        + "\nSolution: " + str(board.getDirections())
 
 def aStar_solver(filename):
     start = time()
@@ -17,7 +21,11 @@ def aStar_solver(filename):
     state_board = sok.new_board(filename)
     board = sok.aStar_search(state_board)
     end = time()
-    return str(board.getDirections()), "Time: " + str(end - start) + "\nLength: " + str(len(str(board.getDirections()))) + "\nGenerated States: " + str(sok.numNodeNewState()) + "\nTraversed States: " + str(len(sok.numNodeExplored()))
+    return str(board.getDirections()), "Time: " + str(end - start) + " seconds" \
+        + "\nLength: " + str(len(str(board.getDirections()))) \
+        + "\nGenerated States: " + str(sok.numNodeNewState()) \
+        + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
+        + "\nSolution: " + str(board.getDirections())
 
 if __name__ == "__main__":
     window = tk.Tk()
