@@ -3,21 +3,21 @@ from sokoban import Sokoban
 from gui import MainApp
 import tkinter as tk
 
-def bfs_solver(filename):
+def bfs_solver(filename, max_time):
     sok = Sokoban()
     state_board = sok.new_board(filename)
-    board = sok.BFS_search(state_board, 3)
-    return str(board.getDirections()), "Time: " + str(sok.timerun) + " seconds" \
+    board = sok.BFS_search(state_board, max_time)
+    return str(board.getDirections()), "Time: " + str(round(sok.timerun, 3)) + " seconds" \
         + "\nLength: " + str(len(str(board.getDirections()))) \
         + "\nGenerated States: " + str(sok.numNodeNewState()) \
         + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
         + "\nSolution: " + str(board.getDirections())
 
-def aStar_solver(filename):
+def aStar_solver(filename, max_time):
     sok = Sokoban()
     state_board = sok.new_board(filename)
-    board = sok.aStar_search(state_board, 3)
-    return str(board.getDirections()), "Time: " + str(sok.timerun) + " seconds" \
+    board = sok.aStar_search(state_board, max_time)
+    return str(board.getDirections()), "Time: " + str(round(sok.timerun, 3)) + " seconds" \
         + "\nLength: " + str(len(str(board.getDirections()))) \
         + "\nGenerated States: " + str(sok.numNodeNewState()) \
         + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
