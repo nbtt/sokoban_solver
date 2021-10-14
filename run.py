@@ -9,7 +9,7 @@ def bfs_solver(filename):
     state_board = sok.new_board(filename)
     board = sok.BFS_search(state_board)
     end = time()
-    return str(board.getDirections()), "Time: " + str(end - start) + " seconds" \
+    return str(board.getDirections()), "Time: " + str(round(end - start, 3)) + " seconds" \
         + "\nLength: " + str(len(str(board.getDirections()))) \
         + "\nGenerated States: " + str(sok.numNodeNewState()) \
         + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
@@ -21,7 +21,7 @@ def aStar_solver(filename):
     state_board = sok.new_board(filename)
     board = sok.aStar_search(state_board)
     end = time()
-    return str(board.getDirections()), "Time: " + str(end - start) + " seconds" \
+    return str(board.getDirections()), "Time: " + str(round(end - start, 3)) + " seconds" \
         + "\nLength: " + str(len(str(board.getDirections()))) \
         + "\nGenerated States: " + str(sok.numNodeNewState()) \
         + "\nTraversed States: " + str(len(sok.numNodeExplored())) \
