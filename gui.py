@@ -322,7 +322,7 @@ class MainApp:
         return new_value.isdigit() and 1 <= int(new_value) <= 1800
 
     def save_log(self):
-        f = open("Log_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + ".txt", "w")
+        f = open(os.path.join("log", "Log_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + ".txt"), "w")
         f.write(self.txt_log.get("1.0", tk.END))
         f.close()
 
