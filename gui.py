@@ -48,7 +48,7 @@ class MainApp:
         # Buttons
         self.btn_show = ttk.Button(master=self.frm_ctrl, text="Show")
         self.btn_solve_BFS = ttk.Button(master=self.frm_ctrl, text="Solve BFS", state=DISABLED)
-        self.btn_solve_AStar = ttk.Button(master=self.frm_ctrl, text="Solve Greedy BFS*", state=DISABLED)
+        self.btn_solve_AStar = ttk.Button(master=self.frm_ctrl, text="Solve GBFS*", state=DISABLED)
         
         self.btn_show.pack()
         self.btn_solve_BFS.pack()
