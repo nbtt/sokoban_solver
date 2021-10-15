@@ -89,12 +89,10 @@ class Board:
         self.index = 1
 
     def move(self, direction):
-        ''' moves player and box '''
         p = self.player + direction.sp
         if p in self.boxes:
             self.boxes.remove(p)
             self.boxes.add(p + direction.sp)
-            self.ucsCost = 2
         self.player = p
         self.dir_list.append(direction)
 

@@ -77,7 +77,6 @@ class Sokoban:
             else:
                 currNode = frontier.pop()
                 moves = currNode.moves_available()
-                currNode.fboxes = frozenset(currNode.boxes)
                 explored.add(currNode)
                 for m in moves:
                     child = deepcopy(currNode)
@@ -121,7 +120,6 @@ class Sokoban:
             else:
                 currNode = heuQueue.get()
                 moves = currNode.moves_available()
-                currNode.fboxes = frozenset(currNode.boxes)
                 explored.add(currNode)
                 for m in moves:
                     child = deepcopy(currNode)
