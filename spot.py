@@ -1,10 +1,4 @@
 class Spot:
-
-    '''
-    Coordinate object
-    Contains overloaded functions for comparison, hashing, and addition
-    '''
-
     def __init__(self, x, y):
         self.x = x
         self.y = y

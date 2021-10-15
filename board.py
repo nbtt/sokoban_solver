@@ -9,20 +9,14 @@ directions = [U, D, L, R]
 
 
 class Board:
-
-    '''
-    Board's overloaded functions and functions for
-    board manipulation live here
-    '''
-
     def __init__(self, dir_list):
-        self.dir_list = dir_list  # list of directions for solution
+        self.dir_list = dir_list  
         self.walls = set()
         self.goals = set()
         self.boxes = set()
-        self.fboxes = frozenset()  # since set() is not hashable
+        self.fboxes = frozenset() 
         self.player = None
-        self.cost = 1  # used for UCS and heuristic searches
+        self.cost = 1 
         self.heuristic = 0
         self.index = 0
 
@@ -80,11 +74,11 @@ class Board:
         self.player = Spot(x, y)
 
     def moves_available(self):
+        ''' set newstate'''
         moves = []
         for d in directions:
             if self.player + d.sp not in self.walls:
                 if self.player + d.sp in self.boxes:
-                # what if there's a wall or box behind it?
                     if self.player + d.sp.double() not in self.boxes.union(self.walls):
                         moves.append(d)
                 else:
@@ -105,14 +99,14 @@ class Board:
         self.dir_list.append(direction)
 
     def is_win(self):
-        ''' Checks for winning/final state '''
+        ''' Checks for winning '''
         if self.goals.issubset(self.boxes):
             return True
         else:
             return False
 
     def getDirections(self):
-        ''' Outputs the list of directions taken for the solution '''
+        ''' contain solution '''
         if self.index != 0:
             return 'Not Found'
         chars = ''
