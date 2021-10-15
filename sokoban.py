@@ -7,11 +7,6 @@ from queue import PriorityQueue
 
 import heapq
 
-'''
-Executes breadth-first search
-uses MyQueue to keep track of frontier
-'''
-
 class Sokoban:
 
     '''
@@ -20,9 +15,6 @@ class Sokoban:
 
     def __init__(self):
         self.time_newstate_explored = []
-        # self.nodes_newstate = 0
-        # self.explored = set()
-        # self.timerun = 0.0
 
     def new_board(self, filename):
         ''' Creates new board from file '''
@@ -62,31 +54,21 @@ class Sokoban:
                 print ("No player on board")
                 return None
 
-    # Node NewState
-    # def numNodeNewState(self):
-    #     return self.nodes_newstate
-    # Explored
-    # def numNodeExplored(self):
-    #     return self.explored
     #BFS
     def BFS_search(self, board, max_time):
         start = time()
-        # self.nodes_newstate = 0
         nodes_newstate = 0
-        explored = set() #nut kham pha
+        explored = set() 
         if board.is_win():
             end = time()
             self.time_newstate_explored.append(end - start)
             self.time_newstate_explored.append(nodes_newstate)
             self.time_newstate_explored.append(len(explored))
-            #self.timerun = end - start
             return board
         node = deepcopy(board) 
         nodes_newstate += 1
         frontier = MyQueue()
         frontier.push(node)
-        # self.explored = set()
-        # explored = set() #nut kham pha
         keepLooking = True
         while keepLooking:
             if frontier.isEmpty():
@@ -107,7 +89,6 @@ class Sokoban:
                             self.time_newstate_explored.append(end - start)
                             self.time_newstate_explored.append(nodes_newstate)
                             self.time_newstate_explored.append(len(explored))
-                            # self.timerun = end - start
                             return child
                         frontier.push(child)
                         end = time()
@@ -116,7 +97,6 @@ class Sokoban:
                             self.time_newstate_explored.append(end - start)
                             self.time_newstate_explored.append(nodes_newstate)
                             self.time_newstate_explored.append(len(explored))
-                            # self.timerun = end - start
                             return child
     # A star Search
     def aStar_search(self, board, max_time):
