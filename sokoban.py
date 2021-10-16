@@ -5,8 +5,6 @@ from copy import deepcopy
 from myqueue import MyQueue
 from queue import PriorityQueue
 
-import heapq
-
 class Sokoban:
 
     '''

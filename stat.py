@@ -10,7 +10,7 @@ if __name__ == "__main__":
     map_start = 0
     map_end = 1
     filename_bfs = os.path.join("stat", "all_bfs.csv")
-    filename_aStar = os.path.join("stat", "all_gbs.csv")
+    filename_gbs = os.path.join("stat", "all_gbs.csv")
     header = ("Map", "Time", "Solution Length", "Generated States", "Traversed States", "Solution")
     # Pattern to extract information from log
     pattern = re.compile("Time: (.*) seconds\nSolution Length: (.*)\nGenerated States: (.*)\nTraversed States: (.*)\nSolution: (.*)")

@@ -1,4 +1,3 @@
-from time import time
 from sokoban import Sokoban
 from gui import MainApp
 import tkinter as tk

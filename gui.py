@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter.constants import DISABLED, HORIZONTAL, NORMAL, SUNKEN, VERTICAL
-from tkinter.font import Font
 import tkinter.ttk as ttk
-from typing_extensions import IntVar
 from PIL import Image, ImageTk
 import os
 from datetime import datetime

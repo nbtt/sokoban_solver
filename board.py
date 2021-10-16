@@ -1,6 +1,5 @@
 from spot import Spot
 from direction import Direction
-from queue import Queue
 L = Direction(Spot(-1, 0), 'l')
 R = Direction(Spot(1, 0), 'r')
 U = Direction(Spot(0, -1), 'u')
