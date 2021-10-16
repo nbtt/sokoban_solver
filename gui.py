@@ -10,10 +10,10 @@ from datetime import datetime
 class MainApp:
     # @param (method) bfs_solver : (file_name : string, max_time : int) -> (solution : string, log : string)
     # @param (method) aStar_solver : (file_name : string, max_time : int) -> (solution : string, log : string)
-    def __init__(self, master : tk.Tk, bfs_solver, aStar_solver):
+    def __init__(self, master : tk.Tk, bfs_solver, gbs_solver):
         self.master = master
         self.solver_bfs = bfs_solver
-        self.solver_aStar = aStar_solver
+        self.solver_gbs = gbs_solver
         ## 3 main columns:
         # Control panel
         self.frm_ctrl = ttk.Frame(master=self.master, width=250)
@@ -48,11 +48,11 @@ class MainApp:
         # Buttons
         self.btn_show = ttk.Button(master=self.frm_ctrl, text="Show")
         self.btn_solve_BFS = ttk.Button(master=self.frm_ctrl, text="Solve BFS", state=DISABLED)
-        self.btn_solve_AStar = ttk.Button(master=self.frm_ctrl, text="Solve GBFS*", state=DISABLED)
+        self.btn_solve_GBS = ttk.Button(master=self.frm_ctrl, text="Solve GBS", state=DISABLED)
         
         self.btn_show.pack()
         self.btn_solve_BFS.pack()
-        self.btn_solve_AStar.pack()
+        self.btn_solve_GBS.pack()
 
         # Solution:
         self.lbl_2 = ttk.Label(master=self.frm_ctrl, text="Solution:")
@@ -136,19 +136,19 @@ class MainApp:
     def bind_func(self):
         self.btn_show.configure(command=self.show_map)
         self.btn_solve_BFS.configure(command=self.solve_map_bfs)
-        self.btn_solve_AStar.configure(command=self.solve_map_aStar)
+        self.btn_solve_GBS.configure(command=self.solve_map_gbs)
         self.btn_save_log.configure(command=self.save_log)
         self.btn_clr_log.configure(command=self.clear_log)
 
     # This function is used for disable solving function of app after a solution is made
     def disable_solving(self):
         self.btn_solve_BFS.configure(state=DISABLED)
-        self.btn_solve_AStar.configure(state=DISABLED)
+        self.btn_solve_GBS.configure(state=DISABLED)
 
     # Opposite function of pause_funcs()
     def enable_solving(self):
         self.btn_solve_BFS.configure(state=NORMAL)
-        self.btn_solve_AStar.configure(state=NORMAL)
+        self.btn_solve_GBS.configure(state=NORMAL)
 
     def show_map(self):
         self.map_idx = self.lstbox_choose.curselection()
@@ -232,8 +232,8 @@ class MainApp:
     def solve_map_bfs(self):
         self.solve_map(self.solver_bfs)
 
-    def solve_map_aStar(self):
-        self.solve_map(self.solver_aStar)
+    def solve_map_gbs(self):
+        self.solve_map(self.solver_gbs)
 
     def solve_map(self, solver_func):
         if self.map_idx is None:
@@ -247,7 +247,7 @@ class MainApp:
 
         # Update log
         self.add_text_widget(self.txt_log, tk.END, "Solve " + self.map_name + " using " + 
-            ("BFS\n\n" if solver_func == self.solver_bfs else "A*\n\n"), rewrite_or_change=False)
+            ("BFS\n\n" if solver_func == self.solver_bfs else "GBS\n\n"), rewrite_or_change=False)
         self.add_text_widget(self.txt_log, tk.END, log, rewrite_or_change=False)
         if solution == "Not Found":
             self.add_text_widget(self.txt_log, tk.END, "\nTimeout (Exceed " + str(self.max_time_var.get()) + " seconds)",
@@ -332,14 +332,14 @@ class MainApp:
 def bfs_solver_sample(filename):
     return "uddurlrl", "Log BFS\nJust testing..."
 
-def aStar_solver_sample(filename):
-    return "rrurru", "Log AStar\nSolution only contains u, d, r and l letter (not capital).\n"
+def gbs_solver_sample(filename):
+    return "rrurru", "Log GBS\nSolution only contains u, d, r and l letter (not capital).\n"
 
 if __name__ == "__main__":
     window = tk.Tk()
     window.title("Sokoban Solver")
     # Map area size
     window.columnconfigure(1, minsize=550)
-    app = MainApp(window, bfs_solver_sample, aStar_solver_sample)
+    app = MainApp(window, bfs_solver_sample, gbs_solver_sample)
     window.resizable(False, False)
     window.mainloop()

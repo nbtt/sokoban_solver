@@ -1,3 +1,4 @@
 *.pyc
 stat/
 log/
+__pycache__/

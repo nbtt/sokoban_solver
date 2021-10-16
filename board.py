@@ -39,8 +39,7 @@ class Board:
                 if (temp < min):
                     min = temp
             sumG += min
-        sumP = sum(abs(box[i].x-self.player.x) + abs(box[i].y-self.player.y) for i in range(numBox))
-        self.heuristic = sumG + sumP + numBox - len(self.boxes & self.goals)
+        self.heuristic = sumG
         return self.heuristic
 
     def __hash__(self):
@@ -94,6 +93,7 @@ class Board:
             self.boxes.remove(p)
             self.boxes.add(p + direction.sp)
         self.player = p
+        self.cost += 1
         self.dir_list.append(direction)
 
     def is_win(self):

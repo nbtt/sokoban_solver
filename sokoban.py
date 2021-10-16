@@ -54,8 +54,8 @@ class Sokoban:
                 print ("No player on board")
                 return None
 
-    #BFS
-    def BFS_search(self, board, max_time):
+    #Breadth-first Search
+    def BFS(self, board, max_time):
         start = time()
         nodes_newstate = 0
         explored = set() 
@@ -97,8 +97,8 @@ class Sokoban:
                             self.time_newstate_explored.append(nodes_newstate)
                             self.time_newstate_explored.append(len(explored))
                             return child
-    # A star Search
-    def aStar_search(self, board, max_time):
+    # Greedy Best-first Search
+    def GBS(self, board, max_time):
         start = time()
         nodes_newstate = 0
         explored = set()
@@ -118,11 +118,11 @@ class Sokoban:
                 print ("Solution not found")
                 return
             else:
-                currNode = heuQueue.get()
-                moves = currNode.moves_available()
-                explored.add(currNode)
+                state = heuQueue.get()
+                moves = state.moves_available()
+                explored.add(state)
                 for m in moves:
-                    child = deepcopy(currNode)
+                    child = deepcopy(state)
                     nodes_newstate += 1
                     child.move(m)
                     if child not in explored:
